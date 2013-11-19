@@ -41,7 +41,8 @@ class Tweetstream:
 			return cjson.decode(line)
 		else:
 			return eval(line)
-			
+
+# ERRADO : Nao funciona para 2-word keyword
 	def detect_keyword(self, word):
 		if (word in self.keywords):
 			return word
