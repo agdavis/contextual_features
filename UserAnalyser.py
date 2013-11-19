@@ -6,13 +6,13 @@ from Tweetstream import *
 import math
 
 class UserAnalyser:
-	def __init__(self, tweetstream=None, userFilePrefix, readFromStream=True):
+	def __init__(self, userFilePrefix, tweetstream=None):
 		self.usersVectors = dict()
 		self.idf = dict()
 		self.userScore = dict()
 		self.keywords = tweetstream.keywords
 		self.userFilePrefix = userFilePrefix
-
+		self.tweetstream = tweetstream
 
 
 	def __iter__(self):
@@ -23,7 +23,7 @@ class UserAnalyser:
 				continue
 
 	def compute_usersVectors(self):
-		for t in tweetstream:
+		for t in self.tweetstream:
 			if t['id'] not in self.usersVectors:
 				self.usersVectors[t['id']] = dict()
 				for kw in self.keywords:

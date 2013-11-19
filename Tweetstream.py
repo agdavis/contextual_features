@@ -42,17 +42,6 @@ class Tweetstream:
 		else:
 			return eval(line)
 
-# ERRADO : Nao funciona para 2-word keyword
-	def detect_keyword(self, word):
-		if (word in self.keywords):
-			return word
-		if (word[0] == '#' or word[0] == '@'):
-			if (word[1:] in self.keywords):
-				return word[1:]
-		return ""
-		
-		
-		
 	
 	def volume_per_hour(self):
 		volume = dict()
@@ -109,7 +98,7 @@ class Tweetstream:
 		words = text.split()
 		ntext = ""
 		for word in words:
-			kword = self.detect_keyword(word)
+			kword = self.word(word)
 			if( kword != ""):
 				ntext += kword + ' '
 		return ntext
@@ -119,7 +108,7 @@ class Tweetstream:
 		users = dict()
 		for tweet in self:
 			for kword in self.keywords:
-				#kword = self.detect_keyword(word)
+				#kword = self.word(word)
 				if (kword in tweet["text"]):
 					if not users.has_key(tweet["user_id"]):
 						users[tweet["user_id"]] = dict()
