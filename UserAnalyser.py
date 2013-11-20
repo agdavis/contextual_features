@@ -23,13 +23,17 @@ class UserAnalyser:
 				continue
 
 	def compute_usersVectors(self):
+		i = 0
 		for t in self.tweetstream:
+			i += 1
+			if i%50000 == 0:
+				print i
 			if t['id'] not in self.usersVectors:
 				self.usersVectors[t['id']] = dict()
-				for kw in self.keywords:
-					self.usersVectors[t['id']][kw] = 0
 			for kw in self.keywords:
 				if kw in t['text']:
+					if not self.usersVectors[t['id']].has_key(kw):
+						self.usersVectors[t['id']][kw] = 0
 					self.usersVectors[t['id']][kw] += 1
 		pickle.dump(self.usersVectors, open(self.userFilePrefix+"_usersVectors.pick", 'w'), pickle.HIGHEST_PROTOCOL)
 		
@@ -42,8 +46,7 @@ class UserAnalyser:
 
 		for user in self:
 			for (word, count) in user[1]:
-				if (count > 0):
-					self.idf[word] += 1
+				self.idf[word] += 1
 			
 		for kw in self.keywords:
 			self.idf[kw] = math.log( 1 + (len(self.usersVectors)/self.idf[kw]))/math.log(2)
