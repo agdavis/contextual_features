@@ -18,7 +18,7 @@ class UserAnalyser:
 	def __iter__(self):
 		for l in self.usersVectors.iteritems():
 			try:
-				yield eval(l)
+				yield l
 			except:
 				continue
 
@@ -28,13 +28,13 @@ class UserAnalyser:
 			i += 1
 			if i%50000 == 0:
 				print i
-			if t['id'] not in self.usersVectors:
-				self.usersVectors[t['id']] = dict()
+			if t['user_id'] not in self.usersVectors:
+				self.usersVectors[t['user_id']] = dict()
 			for kw in self.keywords:
 				if kw in t['text']:
-					if not self.usersVectors[t['id']].has_key(kw):
-						self.usersVectors[t['id']][kw] = 0
-					self.usersVectors[t['id']][kw] += 1
+					if not self.usersVectors[t['user_id']].has_key(kw):
+						self.usersVectors[t['user_id']][kw] = 0
+					self.usersVectors[t['user_id']][kw] += 1
 		pickle.dump(self.usersVectors, open(self.userFilePrefix+"_usersVectors.pick", 'w'), pickle.HIGHEST_PROTOCOL)
 		
 				
@@ -44,10 +44,11 @@ class UserAnalyser:
 		for kw in self.keywords:
 			self.idf[kw] = 0
 
-		for user in self:
-			for (word, count) in user[1]:
+		i = 0
+		for (userid, uservector) in self:
+			for word in uservector:
 				self.idf[word] += 1
-			
+		print self.idf			
 		for kw in self.keywords:
 			self.idf[kw] = math.log( 1 + (len(self.usersVectors)/self.idf[kw]))/math.log(2)
 		
@@ -58,10 +59,9 @@ class UserAnalyser:
 		self.usersScore = dict()
 		for (userid, uservector) in self:
 			score = 0.0
-			for kw in self.keywords:
+			for kw in uservector:
 				freq = uservector[kw]
-				if freq > 0:
-					score += (1.0 + math.log(freq)/math.log(2))
+				score += (1.0 + math.log(freq)/math.log(2)) *self.idf[kw]
 			self.usersScore[userid] = score
 		pickle.dump(self.usersScore, open(self.userFilePrefix+"_usersScore.pick", 'w'), pickle.HIGHEST_PROTOCOL)
 
@@ -80,9 +80,9 @@ class UserAnalyser:
 	
 	def load_usersVectors(self, filen=""):
 		if not filen:
-			self.idf = pickle.load(open(self.userFilePrefix+"_usersVectors.pick", 'r'))
+			self.usersVectors = pickle.load(open(self.userFilePrefix+"_usersVectors.pick", 'r'))
 		else:
-			self.idf = pickle.load(open(filen, 'r'))
+			self.usersVectors = pickle.load(open(filen, 'r'))
 		
 if __name__ == "__main__":
 	print "Lendo os usuarios" 
