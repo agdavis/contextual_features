@@ -50,7 +50,8 @@ class UserAnalyser:
 				self.idf[word] += 1
 		print self.idf			
 		for kw in self.keywords:
-			self.idf[kw] = math.log( 1 + (len(self.usersVectors)/self.idf[kw]))/math.log(2)
+			if (self.idf[kw] > 0):
+				self.idf[kw] = math.log( 1 + (len(self.usersVectors)/self.idf[kw]))/math.log(2)
 		
 		pickle.dump(self.idf, open(self.userFilePrefix+"_idf.pick", 'w'), pickle.HIGHEST_PROTOCOL)
 
