@@ -6,11 +6,12 @@ from Tweetstream import *
 import math
 
 class UserAnalyser:
-	def __init__(self, userFilePrefix, tweetstream=None):
+	def __init__(self, userFilePrefix, tweetstream=None, keywords=[]):
 		self.usersVectors = dict()
 		self.idf = dict()
 		self.userScore = dict()
-		self.keywords = tweetstream.keywords
+		if tweetstream: self.keywords = tweetstream.keywords
+		else: self.keywords = keywords
 		self.userFilePrefix = userFilePrefix
 		self.tweetstream = tweetstream
 

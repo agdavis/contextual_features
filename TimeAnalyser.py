@@ -14,13 +14,13 @@ class TimeAnalyser:
 		self.userinfo = userinfo
 		
 		self.windowSize = timedelta (hours=1)
-		self.timeWindowInit = userstream.inittime
-		self.timeWindowInit.minute = 0
-		self.timeWindowInit.second = 0
+		print userstream.inittime
+		self.timeWindowInit = userstream.inittime.replace(minute = 0, second = 0)
 		self.timeWindowEnd = self.timeWindowInit + self.windowSize
+		print self.timeWindowInit, self.timeWindowEnd
 
-		self.userstreamit = iter(userstream)
-		self.topicstreamit = iter(topicstreamit)
+		self.userstreamit = iter(self.userstream)
+		self.topicstreamit = iter(self.topicstream)
 		self.tempWindowUser = []
 		self.tempWindowTopic = []
 
@@ -45,7 +45,8 @@ class TimeAnalyser:
 				self.tempWindowTopic.append(t)
 				break
 			twWindowUserTopic.append(t)
-
+		self.timeWindowInit = self.timeWindowEnd
+		self.timeWindowEnt += self.windowSize
 		yield (twWindowUser, twWindowTopic)
 			
 		
