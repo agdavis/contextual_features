@@ -25,28 +25,42 @@ class TimeAnalyser:
 		self.tempWindowTopic = []
 
 	def __iter__(self):
-		twWindowUser = []
-		twWindowTopic = []
-		twWindowUser += self.tempWindowUser
-		twWindowTopic += self.tempWindowTopic
-		self.tempWindowUser = []
-		self.tempWindowTopic = []
+		over = False
+		while (not over):
+			twWindowUser = []
+			twWindowTopic = []
+			twWindowUser += self.tempWindowUser
+			twWindowTopic += self.tempWindowTopic
+			self.tempWindowUser = []
+			self.tempWindowTopic = []
+			for t in self.userstreamit:
+				if convert_time(t["created_at"]) < self.timeWindowInit: continue
+				if convert_time(t["created_at"]) >= self.timeWindowEnd:
+					self.tempWindowUser.append(t)
+					break
+				twWindowUser.append(t)
+			else:
+				over = True
 
-		for t in self.userstreamit:
-			if t["created_at"] < self.timeWindowInit: continue
-			if t["created_at"] >= self.timeWindowEnd:
-				self.tempWindowUser.append(t)
-				break
-			twWindowUser.append(t)
+
+			for t in self.topicstreamit:
+				#print t["created_at"], self.timeWindowInit
+				if convert_time(t["created_at"]) < self.timeWindowInit: continue
+				if convert_time(t["created_at"]) >= self.timeWindowEnd:
+					self.tempWindowTopic.append(t)
+					break
+				twWindowTopic.append(t)
+			else:
+				over = True
+
+			#update window
+			self.timeWindowInit = self.timeWindowEnd
+			self.timeWindowEnd = self.timeWindowInit + self.windowSize
 			
-		for t in self.topicstreamit:
-			if t["created_at"] < self.timeWindowInit: continue
-			if t["created_at"] >= self.timeWindowEnd:
-				self.tempWindowTopic.append(t)
-				break
-			twWindowUserTopic.append(t)
-		self.timeWindowInit = self.timeWindowEnd
-		self.timeWindowEnt += self.windowSize
-		yield (twWindowUser, twWindowTopic)
+			# Consume the rest of the stream
+			if (over):
+				for t in self.userstreamit: continue
+				for t in self.topicstreamit: continue
+			yield (twWindowUser, twWindowTopic)
 			
 		

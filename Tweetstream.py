@@ -2,6 +2,9 @@ import cjson
 import sys
 from datetime import *
 
+def convert_time(time):
+	return datetime.strptime(time, "%a %b %d %X +0000 %Y")
+
 def get_user(json):
 	d = dict()
 	d["user_id"] = json["user"]["id"]
@@ -17,13 +20,13 @@ class Tweetstream:
 		json = open(jsonfilee, "r")
 		tweet = self.decode_line(json.readline())
 			
-		self.inittime = datetime.strptime(tweet["created_at"], "%a %b %d %X +0000 %Y")
+		self.inittime = convert_time(tweet["created_at"])
 		
 		lastLine = ""
 		for l in json:
 			lastLine = l
 		tweet = self.decode_line(lastLine)
-		self.endtime = datetime.strptime(tweet["created_at"], "%a %b %d %X +0000 %Y")
+		self.endtime = convert_time(tweet["created_at"])
 		
 		print keywords
 		self.keywords = keywords
