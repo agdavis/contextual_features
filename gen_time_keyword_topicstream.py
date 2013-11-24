@@ -24,24 +24,22 @@ if __name__ == "__main__":
 		keyword_frequencies = dict()
 		for kw in keywords:
 			keyword_frequencies[kw] = 0
-			
+	
+		temp = True	
 		for t in topicwindow:
+			if temp:
+				temp = False
+				print t['created_at'] + '\t',
 			for kw in keywords:
 				if kw in t['text']:
 					keyword_frequencies[kw] += 1
-		
+		#print keyword_frequencies
 		for kw in keywords:
+			if keyword_frequencies[kw] == 0: continue
 			score += ((1.0 + math.log(keyword_frequencies[kw])/math.log(2)) * ua.idf[kw])	
 		score /= len(topicwindow)
-
+		print score
 		for t in userwindow:
 			rank.append((score, t))
-	#	for t in a:
-	#		print t['created_at']
-	#	for t in b:
-	#		print t['created_at']
-		print score, nwindow
+		#print score, nwindow
 	sorted(rank)
-	for (i, t) in enumerate(rank):
-		if i == 50: break
-		print t
