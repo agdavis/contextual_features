@@ -18,7 +18,7 @@ if __name__ == "__main__":
 	ua.load_usersScore()
 	tw = TimeAnalyser(userstream=userstream, topicstream=topicstream, userinfo=ua)
 	nwindow = 0
-	rank = []
+	rank = dict()
 	for (userwindow, topicwindow) in tw:
 		score = 0.0
 		keyword_frequencies = dict()
@@ -37,9 +37,8 @@ if __name__ == "__main__":
 		for kw in keywords:
 			if keyword_frequencies[kw] == 0: continue
 			score += ((1.0 + math.log(keyword_frequencies[kw])/math.log(2)) * ua.idf[kw])	
-		score /= len(topicwindow)
+		score /= math.log(len(topicwindow))
 		print score
 		for t in userwindow:
-			rank.append((score, t))
-		#print score, nwindow
-	sorted(rank)
+			rank[t['id']] = score
+	pickle.dump(rank, open(sys.argv[4] + "_rank_time_keyword.pick", 'w'), pickle.HIGHEST_PROTOCOL) 

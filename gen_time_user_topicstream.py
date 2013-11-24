@@ -29,12 +29,16 @@ if __name__ == "__main__":
 				temp = False
 				print t['created_at'] + '\t',
 			users.add(t['user_id'])
-
+		
+		nusers = len(users)
 		for user in users:
-			score += ua.usersScore[user]
-		score /= len(users)
+			if user in ua.usersScore:
+				score += ua.usersScore[user]
+			else:
+				nusers -= 1
+		score /= nusers
 		print score
 		for t in userwindow:
 			rank[t['id']] = score
 		#prinit score, nwindow
-	pickle.dump(rank, open(sys.argv[4]+"_rank_users_tstream.pick", 'w'), pickle.HIGHEST_PRIORITY)
+	pickle.dump(rank, open(sys.argv[4]+"_rank_users_tstream.pick", 'w'), pickle.HIGHEST_PROTOCOL)
