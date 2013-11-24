@@ -21,7 +21,7 @@ if __name__ == "__main__":
 	rank = dict()
 	
 	ntweets_perUser = dict()
-	for t in usersstream:
+	for t in userstream:
 		if t['user_id'] in ntweets_perUser: ntweets_perUser[t['user_id']] += 1
 		else: ntweets_perUser[t['user_id']] = 1
 	print "Freq per user computed"
@@ -39,7 +39,7 @@ if __name__ == "__main__":
 		nusers = len(users)
 		for user in users:
 			if user in ua.usersScore:
-				score += ua.usersScore[user]/math.log(ntweets_perUser[user])
+				score += ua.usersScore[user]/(1.0 + math.log(ntweets_perUser[user]))
 			else:
 				nusers -= 1
 		score /= nusers
