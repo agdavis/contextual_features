@@ -19,14 +19,18 @@ if __name__ == "__main__":
 	tw = TimeAnalyser(userstream=userstream, topicstream=topicstream, userinfo=ua)
 	nwindow = 0
 	rank = dict()
-
-	# normalizar pelo numero de kw no topic vector
+	
+	ntweets_perUser = dict()
+	for t in usersstream:
+		if t['user_id'] in ntweets_perUser: ntweets_perUser[t['user_id']] += 1
+		else: ntweets_perUser[t['user_id']] = 1
+	print "Freq per user computed"
 	for (userwindow, topicwindow) in tw:
 		score = 0.0
 		users = set()
 		
 		temp = True	
-		for t in topicwindow:
+		for t in userwindow:
 			if temp:
 				temp = False
 				print t['created_at'] + '\t',
@@ -35,7 +39,7 @@ if __name__ == "__main__":
 		nusers = len(users)
 		for user in users:
 			if user in ua.usersScore:
-				score += ua.usersScore[user]
+				score += ua.usersScore[user]/math.log(ntweets_perUser[user])
 			else:
 				nusers -= 1
 		score /= nusers

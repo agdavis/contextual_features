@@ -19,12 +19,12 @@ class TimeAnalyser:
 		self.timeWindowEnd = self.timeWindowInit + self.windowSize
 		print self.timeWindowInit, self.timeWindowEnd
 
-		self.userstreamit = iter(self.userstream)
-		self.topicstreamit = iter(self.topicstream)
 		self.tempWindowUser = []
 		self.tempWindowTopic = []
 
 	def __iter__(self):
+		self.userstreamit = iter(self.userstream)
+		self.topicstreamit = iter(self.topicstream)
 		over = False
 		while (not over):
 			twWindowUser = []
