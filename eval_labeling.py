@@ -7,7 +7,6 @@ import pickle
 
 if __name__ == "__main__":
 	validation_file = open(sys.argv[1], 'r')
-	labeled_file = open(sys.argv[2], 'w')
 	tweets = []
 	for t in validation_file:
 		tweets.append(eval(t))
@@ -17,10 +16,11 @@ if __name__ == "__main__":
 	random.shuffle(tweets)
 	i = 0 
 	while npositive < 100:
-		print tweet[i]
-		ans = raw_input()
-		while ans != 'NFL' or ans != 'MLB' or ans != 'NBA' or ans != 'NHL' or ans != 'NONE': ans = raw_input()
-		tweet[i]['label'] = ans
-		labeled.append(tweet)
-		pickle.dump(labeled, labeled_file, pickle.HIGHEST_PROTOCOL)
-		
+		print tweets[i]
+		ans = raw_input().strip('\n')
+		while not (ans != 'NFL' or ans != 'MLB' or ans != 'NBA' or ans != 'NHL' or ans != 'NONE'): ans = raw_input().strip('\n')
+		if ans == 'MLB': npositive += 1
+		tweets[i]['label'] = ans
+		labeled.append(tweets[i])
+		pickle.dump(labeled, open(sys.argv[2], 'w'), pickle.HIGHEST_PROTOCOL)
+		i += 1	

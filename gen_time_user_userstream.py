@@ -47,4 +47,4 @@ if __name__ == "__main__":
 		for t in userwindow:
 			rank[t['id']] = score
 		#prinit score, nwindow
-	pickle.dump(rank, open(sys.argv[4]+"_rank_users_tstream.pick", 'w'), pickle.HIGHEST_PROTOCOL)
+	pickle.dump(rank, open(sys.argv[4]+"_rank_TIME_users_ustream.pick", 'w'), pickle.HIGHEST_PROTOCOL)

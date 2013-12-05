@@ -25,8 +25,8 @@ class Tweetstream:
 		lastLine = ""
 		for l in json:
 			lastLine = l
-		tweet = self.decode_line(lastLine)
-		self.endtime = convert_time(tweet["created_at"])
+		#tweet = self.decode_line(lastLine)
+		#self.endtime = convert_time(tweet["created_at"])
 		
 		print keywords
 		self.keywords = keywords
