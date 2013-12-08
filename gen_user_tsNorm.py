@@ -29,6 +29,6 @@ if __name__ == "__main__":
 		for t in userwindow:
 			score = 0.0
 			if t['user_id'] in ua.usersScore:
-				rank[t['id']] = ua.usersScore[t['user_id']]/log(len(users))
+				rank[t['id']] = ua.usersScore[t['user_id']]/math.log(len(users))
 			#prinit score, nwindow
 	pickle.dump(rank, open(sys.argv[4]+"_rank_USER_tsNorm.pick", 'w'), pickle.HIGHEST_PROTOCOL)

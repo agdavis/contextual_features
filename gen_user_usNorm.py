@@ -20,8 +20,8 @@ if __name__ == "__main__":
 	
 	ntweets = dict()
 	for t in userstream:
-		if not(t['user_id'] in ntweets): t['user_id'] = 1
-		else: t['user_id'] += 1
+		if not(t['user_id'] in ntweets): ntweets[t['user_id']] = 1
+		else: ntweets[t['user_id']] += 1
 
 	# normalizar pelo numero de kw no topic vector
 	for t in userstream:
