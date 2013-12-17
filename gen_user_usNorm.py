@@ -28,5 +28,7 @@ if __name__ == "__main__":
 		score = 0.0
 		if t['user_id'] in ua.usersScore:
 			rank[t['id']] = (ua.usersScore[t['user_id']]/ntweets[t['user_id']])
+		else:
+			rank[t['id']] = 0
 		#prinit score, nwindow
 	pickle.dump(rank, open(sys.argv[4]+"_rank_USER_usNorm.pick", 'w'), pickle.HIGHEST_PROTOCOL)

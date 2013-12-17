@@ -25,6 +25,7 @@ if __name__ == "__main__":
 	rank = pickle.load(open(sys.argv[1], 'r'))
 	labeled = pickle.load(open(sys.argv[2], 'r'))
 	label = sys.argv[3]
+	users = eval(open("/scratch/agdavis/usersCollection.txt", 'r').readline())
 	N = 100
 	nrep = 50
 	
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 	for rep in xrange(0, nrep):
 		res = []
 		for ltweet in labeled:
-			if ltweet['label'] == label:
+			if ltweet['label'] == label and rank[ltweet['id']] > 0 :
 				if rep == 0: nPositive += 1 # Counts the number of labeled examples
 				population = random.sample(rank.items(), N)
 				population.append((ltweet['id'], rank[ltweet['id']]))
